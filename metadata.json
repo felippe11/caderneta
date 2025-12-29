@@ -1,0 +1,5 @@
+{
+  "name": "Caderneta Digital Multi-Escola",
+  "description": "Uma plataforma de gestão escolar multi-tenant para administração, professores e alunos. Inclui gestão de frequência, notas e relatórios.",
+  "requestFramePermissions": []
+}
