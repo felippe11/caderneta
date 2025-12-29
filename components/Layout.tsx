@@ -12,7 +12,8 @@ import {
   CalendarCheck,
   FileText,
   MessageSquare,
-  Lock
+  Lock,
+  BarChart2
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -36,6 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ user, school, children, onLogout, activ
         return [
           { label: 'Painel Geral', path: '/dashboard', icon: LayoutDashboard },
           { label: 'Estrutura', path: '/structure', icon: Users },
+          { label: 'Relatórios', path: '/reports', icon: BarChart2 }, // Added Reports
           { label: 'Calendário', path: '/calendar', icon: CalendarCheck },
           { label: 'Comunicação', path: '/communication', icon: MessageSquare },
           { label: 'Configurações', path: '/settings', icon: Settings },

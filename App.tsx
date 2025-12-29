@@ -8,6 +8,7 @@ import ClassManager from './pages/ClassManager';
 import StudentGrades from './pages/StudentGrades';
 import AdminStructure from './pages/AdminStructure';
 import AdminSettings from './pages/AdminSettings';
+import AdminReports from './pages/AdminReports'; // Added Import
 import Communication from './pages/Communication';
 import CalendarPage from './pages/CalendarPage';
 import { User, School } from './types';
@@ -65,6 +66,7 @@ const App: React.FC = () => {
              <>
                <Route path="/structure" element={<AdminStructure />} />
                <Route path="/settings" element={<AdminSettings school={currentSchool} />} />
+               <Route path="/reports" element={<AdminReports />} /> 
              </>
           )}
 
