@@ -5,10 +5,10 @@ import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend
 } from 'recharts';
 import { 
-  FileText, Download, Printer, Filter, ChevronRight, 
+  FileText, Printer, Filter, ChevronRight, 
   TrendingUp, TrendingDown, Users, AlertTriangle, 
   CheckCircle, FileSpreadsheet, PieChart as PieChartIcon, 
-  BarChart as BarChartIcon, Activity
+  BarChart as BarChartIcon, Activity, ChevronDown, BookOpen
 } from 'lucide-react';
 
 // --- MOCK DATA FOR CHARTS ---
@@ -21,12 +21,12 @@ const PERFORMANCE_DATA = [
 ];
 
 const SUBJECT_PERFORMANCE = [
-  { name: 'Matemática', media: 7.2, aprovacao: 85 },
-  { name: 'Português', media: 8.1, aprovacao: 92 },
-  { name: 'História', media: 8.5, aprovacao: 95 },
-  { name: 'Geografia', media: 7.8, aprovacao: 88 },
-  { name: 'Física', media: 6.5, aprovacao: 70 },
-  { name: 'Química', media: 6.9, aprovacao: 75 },
+  { name: 'Mat', media: 7.2, aprovacao: 85 }, // Shortened names for mobile
+  { name: 'Port', media: 8.1, aprovacao: 92 },
+  { name: 'Hist', media: 8.5, aprovacao: 95 },
+  { name: 'Geo', media: 7.8, aprovacao: 88 },
+  { name: 'Fís', media: 6.5, aprovacao: 70 },
+  { name: 'Quím', media: 6.9, aprovacao: 75 },
 ];
 
 const ATTENDANCE_MONTHLY = [
@@ -38,10 +38,10 @@ const ATTENDANCE_MONTHLY = [
 ];
 
 const GRADES_DISTRIBUTION = [
-  { name: 'Excelente (9-10)', value: 15, color: '#10b981' },
-  { name: 'Bom (7-8.9)', value: 45, color: '#3b82f6' },
-  { name: 'Regular (5-6.9)', value: 30, color: '#f59e0b' },
-  { name: 'Crítico (0-4.9)', value: 10, color: '#ef4444' },
+  { name: 'Excelente', value: 15, color: '#10b981' },
+  { name: 'Bom', value: 45, color: '#3b82f6' },
+  { name: 'Regular', value: 30, color: '#f59e0b' },
+  { name: 'Crítico', value: 10, color: '#ef4444' },
 ];
 
 const RADAR_DATA = [
@@ -67,21 +67,19 @@ type ReportType =
   | 'MONTHLY_FREQ' | 'FINAL_GRADES' | 'RECOVERY' | 'PARENTS_MEETING';
 
 const REPORT_TYPES: { id: ReportType; label: string; desc: string; icon: any }[] = [
-  { id: 'INDIVIDUAL', label: 'Boletim Individual', desc: 'Relatório completo de notas e frequência por aluno', icon: FileText },
-  { id: 'CLASS_PERFORMANCE', label: 'Desempenho da Turma', desc: 'Análise geral de notas e frequência da turma', icon: BarChartIcon },
-  { id: 'ATTENDANCE', label: 'Relatório de Frequência', desc: 'Frequência detalhada por período e disciplina', icon: CheckCircle },
-  { id: 'GRADE_SUMMARY', label: 'Resumo de Notas', desc: 'Médias e estatísticas por disciplina', icon: PieChartIcon },
-  { id: 'COMPARATIVE', label: 'Análise Comparativa', desc: 'Compare desempenho entre turmas e períodos', icon: Activity },
-  { id: 'RISK', label: 'Alunos em Risco', desc: 'Identifica alunos com baixo desempenho ou frequência', icon: AlertTriangle },
-  { id: 'SUBJECT_DETAIL', label: 'Desempenho por Disciplina', desc: 'Análise detalhada de cada disciplina', icon: BookOpen },
-  { id: 'PROFESSOR', label: 'Relatório do Professor', desc: 'Resumo de todas as turmas e disciplinas', icon: Users },
-  { id: 'MONTHLY_FREQ', label: 'Frequência Mensal', desc: 'Análise de frequência mês a mês', icon: TrendingUp },
-  { id: 'FINAL_GRADES', label: 'Notas Finais', desc: 'Consolidação de notas do ano letivo', icon: CheckCircle },
-  { id: 'RECOVERY', label: 'Relatório de Recuperação', desc: 'Alunos em recuperação e resultados', icon: TrendingDown },
-  { id: 'PARENTS_MEETING', label: 'Reunião de Pais', desc: 'Resumo executivo para apresentação aos pais', icon: Users },
+  { id: 'INDIVIDUAL', label: 'Boletim Individual', desc: 'Notas e frequência detalhada', icon: FileText },
+  { id: 'CLASS_PERFORMANCE', label: 'Desempenho da Turma', desc: 'Análise geral da turma', icon: BarChartIcon },
+  { id: 'ATTENDANCE', label: 'Relatório de Frequência', desc: 'Frequência por período', icon: CheckCircle },
+  { id: 'GRADE_SUMMARY', label: 'Resumo de Notas', desc: 'Estatísticas por disciplina', icon: PieChartIcon },
+  { id: 'COMPARATIVE', label: 'Análise Comparativa', desc: 'Comparação entre turmas', icon: Activity },
+  { id: 'RISK', label: 'Alunos em Risco', desc: 'Baixo desempenho/frequência', icon: AlertTriangle },
+  { id: 'SUBJECT_DETAIL', label: 'Por Disciplina', desc: 'Análise detalhada', icon: BookOpen },
+  { id: 'PROFESSOR', label: 'Relatório do Professor', desc: 'Resumo de aulas e turmas', icon: Users },
+  { id: 'MONTHLY_FREQ', label: 'Frequência Mensal', desc: 'Evolução mês a mês', icon: TrendingUp },
+  { id: 'FINAL_GRADES', label: 'Notas Finais', desc: 'Consolidação do ano letivo', icon: CheckCircle },
+  { id: 'RECOVERY', label: 'Recuperação', desc: 'Resultados de recuperação', icon: TrendingDown },
+  { id: 'PARENTS_MEETING', label: 'Reunião de Pais', desc: 'Resumo para apresentação', icon: Users },
 ];
-
-import { BookOpen } from 'lucide-react';
 
 const AdminReports: React.FC = () => {
   const [selectedReport, setSelectedReport] = useState<ReportType>('COMPARATIVE');
@@ -98,7 +96,7 @@ const AdminReports: React.FC = () => {
 
   const renderStatsCards = () => {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm">
            <div className="flex justify-between items-start">
              <div>
@@ -152,19 +150,22 @@ const AdminReports: React.FC = () => {
   };
 
   const renderChart = () => {
+    // Determine height based on device roughly via CSS classes in container, 
+    // but here we just ensure content fits.
+    
     switch (selectedReport) {
       case 'COMPARATIVE':
         return (
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width="100%" height="100%">
             <LineChart data={PERFORMANCE_DATA}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} />
-              <YAxis axisLine={false} tickLine={false} domain={[0, 10]} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
+              <YAxis axisLine={false} tickLine={false} domain={[0, 10]} width={30} />
               <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-              <Legend />
-              <Line type="monotone" dataKey="turmaA" name="9º Ano A" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="turmaB" name="9º Ano B" stroke="#10b981" strokeWidth={3} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="turmaC" name="1º Médio" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4 }} />
+              <Legend wrapperStyle={{fontSize: '12px', paddingTop: '10px'}} />
+              <Line type="monotone" dataKey="turmaA" name="9º A" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="turmaB" name="9º B" stroke="#10b981" strokeWidth={3} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="turmaC" name="1º Méd" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
         );
@@ -172,15 +173,15 @@ const AdminReports: React.FC = () => {
       case 'SUBJECT_DETAIL':
       case 'CLASS_PERFORMANCE':
         return (
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart layout="vertical" data={SUBJECT_PERFORMANCE} margin={{ left: 20 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart layout="vertical" data={SUBJECT_PERFORMANCE} margin={{ left: 0, right: 30 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
               <XAxis type="number" domain={[0, 10]} hide />
-              <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={100} />
+              <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={60} tick={{fontSize: 12}} />
               <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-              <Legend />
-              <Bar dataKey="media" name="Média da Turma" fill="#3b82f6" radius={[0, 6, 6, 0]} barSize={20} />
-              <Bar dataKey="aprovacao" name="Taxa Aprovação (Escala 1/10)" fill="#10b981" radius={[0, 6, 6, 0]} barSize={20} />
+              <Legend wrapperStyle={{fontSize: '12px'}} />
+              <Bar dataKey="media" name="Média" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={15} />
+              <Bar dataKey="aprovacao" name="Aprovação (1/10)" fill="#10b981" radius={[0, 4, 4, 0]} barSize={15} />
             </BarChart>
           </ResponsiveContainer>
         );
@@ -188,13 +189,13 @@ const AdminReports: React.FC = () => {
       case 'MONTHLY_FREQ':
       case 'ATTENDANCE':
         return (
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={ATTENDANCE_MONTHLY}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} />
-              <YAxis axisLine={false} tickLine={false} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12}} />
+              <YAxis axisLine={false} tickLine={false} width={30} />
               <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-              <Legend />
+              <Legend wrapperStyle={{fontSize: '12px'}} />
               <Area type="monotone" dataKey="presentes" name="Presença %" stackId="1" stroke="#10b981" fill="#10b981" fillOpacity={0.2} />
               <Area type="monotone" dataKey="faltas" name="Faltas %" stackId="1" stroke="#ef4444" fill="#ef4444" fillOpacity={0.2} />
             </AreaChart>
@@ -204,14 +205,14 @@ const AdminReports: React.FC = () => {
       case 'GRADE_SUMMARY':
       case 'FINAL_GRADES':
         return (
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={GRADES_DISTRIBUTION}
                 cx="50%"
                 cy="50%"
-                innerRadius={80}
-                outerRadius={120}
+                innerRadius={60}
+                outerRadius={90}
                 paddingAngle={5}
                 dataKey="value"
               >
@@ -220,7 +221,7 @@ const AdminReports: React.FC = () => {
                 ))}
               </Pie>
               <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-              <Legend />
+              <Legend wrapperStyle={{fontSize: '12px'}} />
             </PieChart>
           </ResponsiveContainer>
         );
@@ -228,14 +229,14 @@ const AdminReports: React.FC = () => {
       case 'INDIVIDUAL':
       case 'PARENTS_MEETING':
         return (
-          <ResponsiveContainer width="100%" height={400}>
-            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={RADAR_DATA}>
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart cx="50%" cy="50%" outerRadius="70%" data={RADAR_DATA}>
               <PolarGrid stroke="#e2e8f0" />
-              <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748b', fontSize: 12 }} />
+              <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748b', fontSize: 10 }} />
               <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
               <Radar name="Aluno" dataKey="A" stroke="#3b82f6" strokeWidth={3} fill="#3b82f6" fillOpacity={0.3} />
-              <Radar name="Média da Turma" dataKey="B" stroke="#94a3b8" strokeWidth={2} fill="#94a3b8" fillOpacity={0.1} />
-              <Legend />
+              <Radar name="Turma" dataKey="B" stroke="#94a3b8" strokeWidth={2} fill="#94a3b8" fillOpacity={0.1} />
+              <Legend wrapperStyle={{fontSize: '12px', marginTop: '10px'}} />
               <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
             </RadarChart>
           </ResponsiveContainer>
@@ -244,32 +245,36 @@ const AdminReports: React.FC = () => {
       case 'RISK':
       case 'RECOVERY':
         return (
-           <div className="flex flex-col items-center">
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={RISK_DATA}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={100}
-                    dataKey="value"
-                    label
-                  >
-                    {RISK_DATA.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} strokeWidth={2} stroke="#fff" />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="w-full mt-6">
-                 <h4 className="text-sm font-bold text-slate-700 mb-3">Detalhamento de Alunos Críticos</h4>
+           <div className="flex flex-col items-center h-full">
+              <div className="flex-1 w-full min-h-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={RISK_DATA}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      dataKey="value"
+                      label={({ cx, cy, midAngle, innerRadius, outerRadius, value, index }) => {
+                        return window.innerWidth > 600 ? value : '';
+                      }}
+                    >
+                      {RISK_DATA.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} strokeWidth={2} stroke="#fff" />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                    <Legend wrapperStyle={{fontSize: '12px'}} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="w-full mt-4 bg-slate-50 p-3 rounded-lg border border-slate-100 max-h-[150px] overflow-y-auto">
+                 <h4 className="text-xs font-bold text-slate-700 mb-2 uppercase tracking-wide">Alunos em Estado Crítico</h4>
                  <div className="space-y-2">
                     {[1, 2, 3].map(i => (
-                      <div key={i} className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
-                         <span className="font-medium text-red-900">Aluno Exemplo {i}</span>
-                         <span className="text-xs font-bold bg-white text-red-600 px-2 py-1 rounded border border-red-200">Média 4.2</span>
+                      <div key={i} className="flex items-center justify-between p-2 bg-white rounded border border-slate-200">
+                         <span className="font-medium text-xs text-slate-700">Aluno {i}</span>
+                         <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">Média 4.2</span>
                       </div>
                     ))}
                  </div>
@@ -278,24 +283,43 @@ const AdminReports: React.FC = () => {
         );
 
       default:
-        return <div className="h-96 flex items-center justify-center text-slate-400">Selecione um relatório</div>;
+        return <div className="h-full flex items-center justify-center text-slate-400">Selecione um relatório</div>;
     }
   };
 
   const currentReportInfo = REPORT_TYPES.find(r => r.id === selectedReport);
 
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-100px)] gap-6">
+    <div className="flex flex-col lg:flex-row min-h-[calc(100vh-100px)] gap-6 pb-6">
       
-      {/* Sidebar - Report Selector */}
-      <div className="w-full lg:w-80 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden shrink-0">
+      {/* MOBILE ONLY: Report Selector Dropdown */}
+      <div className="lg:hidden">
+        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Selecionar Relatório</label>
+        <div className="relative">
+          <select 
+            value={selectedReport}
+            onChange={(e) => setSelectedReport(e.target.value as ReportType)}
+            className="w-full appearance-none bg-white border border-slate-200 text-slate-900 font-bold py-3 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+          >
+            {REPORT_TYPES.map(type => (
+              <option key={type.id} value={type.id}>{type.label}</option>
+            ))}
+          </select>
+          <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-500">
+            <ChevronDown size={20} />
+          </div>
+        </div>
+      </div>
+
+      {/* DESKTOP ONLY: Sidebar - Report Selector */}
+      <div className="hidden lg:flex w-80 bg-white rounded-2xl border border-slate-200 shadow-sm flex-col overflow-hidden shrink-0 h-[calc(100vh-140px)] sticky top-6">
         <div className="p-4 border-b border-slate-100 bg-slate-50">
           <h2 className="font-bold text-slate-800 flex items-center gap-2">
             <Filter size={20} className="text-blue-600" /> 
             Catálogo de Relatórios
           </h2>
         </div>
-        <div className="overflow-y-auto flex-1 p-2 space-y-1">
+        <div className="overflow-y-auto flex-1 p-2 space-y-1 custom-scrollbar">
           {REPORT_TYPES.map((report) => (
             <button
               key={report.id}
@@ -320,44 +344,44 @@ const AdminReports: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pr-1">
+      <div className="flex-1 flex flex-col min-w-0">
         
         {/* Header & Actions */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6">
-          <div>
-             <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <div className="w-full md:w-auto">
+             <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2 truncate">
                {currentReportInfo?.label}
              </h1>
-             <p className="text-slate-500 mt-1">{currentReportInfo?.desc}</p>
+             <p className="text-slate-500 mt-1 text-sm">{currentReportInfo?.desc}</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2 w-full md:w-auto">
              <button 
                 onClick={() => handleExport('PDF')}
                 disabled={isExporting}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
+                className="flex-1 md:flex-none justify-center flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs md:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
              >
-                {isExporting ? '...' : <><FileText size={16} className="text-red-500" /> Exportar PDF</>}
+                {isExporting ? '...' : <><FileText size={16} className="text-red-500" /> <span className="hidden sm:inline">Exportar</span> PDF</>}
              </button>
              <button 
                 onClick={() => handleExport('EXCEL')}
                 disabled={isExporting}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
+                className="flex-1 md:flex-none justify-center flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs md:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm"
              >
-                {isExporting ? '...' : <><FileSpreadsheet size={16} className="text-emerald-500" /> Excel/CSV</>}
+                {isExporting ? '...' : <><FileSpreadsheet size={16} className="text-emerald-500" /> <span className="hidden sm:inline">Exportar</span> Excel</>}
              </button>
              <button 
                 onClick={() => handleExport('PRINT')}
                 disabled={isExporting}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-900 border border-slate-900 rounded-lg text-sm font-semibold text-white hover:bg-slate-800 transition-all shadow-md"
+                className="flex-1 md:flex-none justify-center flex items-center gap-2 px-3 py-2 bg-slate-900 border border-slate-900 rounded-lg text-xs md:text-sm font-semibold text-white hover:bg-slate-800 transition-all shadow-md"
              >
-                <Printer size={16} /> Imprimir
+                <Printer size={16} /> <span className="hidden sm:inline">Imprimir</span>
              </button>
           </div>
         </div>
 
-        {/* Filters (Visual Only) */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-6 flex flex-wrap gap-4">
-           <div className="flex-1 min-w-[200px]">
+        {/* Filters (Responsive) */}
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-6 flex flex-col sm:flex-row flex-wrap gap-4">
+           <div className="flex-1 min-w-full sm:min-w-[150px]">
              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Período</label>
              <select className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
                <option>Ano Letivo 2024</option>
@@ -365,7 +389,7 @@ const AdminReports: React.FC = () => {
                <option>2º Bimestre</option>
              </select>
            </div>
-           <div className="flex-1 min-w-[200px]">
+           <div className="flex-1 min-w-full sm:min-w-[150px]">
              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Turma</label>
              <select className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
                <option>Todas as Turmas</option>
@@ -374,7 +398,7 @@ const AdminReports: React.FC = () => {
                <option>1º Ano Médio</option>
              </select>
            </div>
-           <div className="flex-1 min-w-[200px]">
+           <div className="flex-1 min-w-full sm:min-w-[150px]">
              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Disciplina</label>
              <select className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
                <option>Geral / Todas</option>
@@ -384,16 +408,16 @@ const AdminReports: React.FC = () => {
            </div>
         </div>
 
-        {/* Stats Cards */}
+        {/* Stats Cards (Grid already responsive) */}
         {renderStatsCards()}
 
-        {/* Main Chart Area */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm min-h-[450px]">
-           <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+        {/* Main Chart Area (Adaptive Height) */}
+        <div className="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-sm h-[400px] md:h-[500px]">
+           <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
              <Activity className="text-blue-600" size={20} /> 
              Visualização Gráfica
            </h3>
-           <div className="w-full">
+           <div className="w-full h-[320px] md:h-[400px]">
              {renderChart()}
            </div>
         </div>
