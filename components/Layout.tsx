@@ -37,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ user, school, children, onLogout, activ
         return [
           { label: 'Painel Geral', path: '/dashboard', icon: LayoutDashboard },
           { label: 'Estrutura', path: '/structure', icon: Users },
-          { label: 'Relatórios', path: '/reports', icon: BarChart2 }, // Added Reports
+          { label: 'Relatórios', path: '/reports', icon: BarChart2 },
           { label: 'Calendário', path: '/calendar', icon: CalendarCheck },
           { label: 'Comunicação', path: '/communication', icon: MessageSquare },
           { label: 'Configurações', path: '/settings', icon: Settings },
@@ -56,7 +56,7 @@ const Layout: React.FC<LayoutProps> = ({ user, school, children, onLogout, activ
         }
         return [
           { label: 'Resumo', path: '/dashboard', icon: LayoutDashboard },
-          { label: 'Meu Portal', path: '/grades', icon: FileText }, // Renamed from Boletim to encompass Content/Tasks
+          { label: 'Meu Portal', path: '/grades', icon: FileText },
           { label: 'Calendário', path: '/calendar', icon: CalendarCheck },
           { label: 'Avisos', path: '/communication', icon: MessageSquare },
         ];
@@ -70,24 +70,24 @@ const Layout: React.FC<LayoutProps> = ({ user, school, children, onLogout, activ
   return (
     <div className="flex h-screen bg-[#f8fafc] overflow-hidden font-sans">
       {/* Sidebar for Desktop */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-slate-300 transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 shadow-2xl`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-blue-50 border-r border-blue-100 text-slate-600 transition-transform duration-300 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 shadow-xl md:shadow-none`}>
         <div className="flex flex-col h-full">
           {/* Logo / School Name */}
           <div className="p-8 pb-6">
-            <div className="flex items-center gap-3 font-bold text-xl tracking-tight text-white mb-6">
-              <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-2 rounded-xl shadow-lg shadow-blue-500/20">
+            <div className="flex items-center gap-3 font-bold text-xl tracking-tight text-slate-800 mb-6">
+              <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-2 rounded-xl shadow-lg shadow-blue-600/20">
                 <GraduationCap className="w-6 h-6 text-white" />
               </div>
               <span className="truncate">{school.name}</span>
             </div>
             
-            <div className="px-4 py-3 bg-slate-800/50 rounded-xl border border-slate-700/50 flex items-center gap-3">
-               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-bold text-xs shadow-inner">
+            <div className="px-4 py-3 bg-white border border-blue-100 rounded-xl shadow-sm flex items-center gap-3">
+               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-700 font-bold text-xs">
                   {user.name.charAt(0)}
                </div>
                <div className="overflow-hidden">
-                  <p className="text-sm font-semibold text-white truncate leading-none mb-1">{user.name}</p>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">
+                  <p className="text-sm font-bold text-slate-800 truncate leading-none mb-1">{user.name}</p>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">
                     {user.role === 'ADMIN' ? 'Administrador' : user.role === 'PROFESSOR' ? 'Professor' : 'Estudante'}
                   </p>
                </div>
@@ -96,7 +96,7 @@ const Layout: React.FC<LayoutProps> = ({ user, school, children, onLogout, activ
 
           {/* Nav Items */}
           <nav className="flex-1 px-4 py-2 space-y-1.5 overflow-y-auto">
-            <div className="px-4 pb-2 text-xs font-bold text-slate-500 uppercase tracking-widest">Menu Principal</div>
+            <div className="px-4 pb-2 text-xs font-bold text-blue-400 uppercase tracking-widest">Menu Principal</div>
             {navItems.map((item) => {
               const isActive = activePath === item.path;
               return (
@@ -106,13 +106,13 @@ const Layout: React.FC<LayoutProps> = ({ user, school, children, onLogout, activ
                     onNavigate(item.path);
                     setIsSidebarOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3.5 px-4 py-3.5 text-sm font-medium rounded-xl transition-all duration-200 group ${
+                  className={`w-full flex items-center gap-3.5 px-4 py-3.5 text-sm font-bold rounded-xl transition-all duration-200 group ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
-                      : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                      : 'text-slate-600 hover:bg-white hover:text-blue-700 hover:shadow-sm'
                   }`}
                 >
-                  <item.icon size={20} className={`${isActive ? 'text-white' : 'text-slate-500 group-hover:text-white'} transition-colors`} />
+                  <item.icon size={20} className={`${isActive ? 'text-white' : 'text-slate-400 group-hover:text-blue-600'} transition-colors`} />
                   {item.label}
                   {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white/50" />}
                 </button>
@@ -121,13 +121,13 @@ const Layout: React.FC<LayoutProps> = ({ user, school, children, onLogout, activ
           </nav>
 
           {/* Logout */}
-          <div className="p-4 border-t border-slate-800">
+          <div className="p-4 border-t border-blue-100">
             <button 
               onClick={onLogout}
-              className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-400 hover:bg-slate-800 rounded-xl transition-colors group"
+              className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-500 hover:bg-white hover:text-red-600 hover:shadow-sm rounded-xl transition-all group"
             >
-              <LogOut size={18} className="group-hover:text-red-400 transition-colors" />
-              <span className="group-hover:text-slate-200 transition-colors">Sair da conta</span>
+              <LogOut size={18} className="group-hover:text-red-500 transition-colors" />
+              <span>Sair da conta</span>
             </button>
           </div>
         </div>
@@ -159,7 +159,7 @@ const Layout: React.FC<LayoutProps> = ({ user, school, children, onLogout, activ
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}

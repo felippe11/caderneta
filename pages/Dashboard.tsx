@@ -1,13 +1,13 @@
 import React from 'react';
 import { User, UserRole } from '../types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Users, BookOpen, AlertCircle, TrendingUp, Calendar, ArrowUpRight, Award, CheckCircle, Clock } from 'lucide-react';
+import { Users, BookOpen, AlertCircle, TrendingUp, Calendar, ArrowUpRight, Award, CheckCircle, Clock, Plus, FileText, User as UserIcon } from 'lucide-react';
 
 interface DashboardProps {
   user: User;
 }
 
-// Mock Data
+// Mock Data for Charts (Student/Professor)
 const ATTENDANCE_DATA = [
   { name: 'Seg', presenca: 100 },
   { name: 'Ter', presenca: 100 },
@@ -24,6 +24,33 @@ const PERFORMANCE_DATA = [
 ];
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+
+// Mock Data for Admin Dashboard Lists
+const RECENT_ACTIVITIES = [
+  { id: 1, user: 'João Santos', action: 'lançou notas de Matemática', context: '6º A', time: '5 min atrás', avatar: 'JS', color: 'bg-blue-100 text-blue-600' },
+  { id: 2, user: 'Ana Costa', action: 'cadastrou novo aluno', context: '7º B', time: '15 min atrás', avatar: 'AC', color: 'bg-purple-100 text-purple-600' },
+  { id: 3, user: 'Carlos Ferreira', action: 'registrou frequência', context: '8º A', time: '32 min atrás', avatar: 'CF', color: 'bg-emerald-100 text-emerald-600' },
+  { id: 4, user: 'Maria Silva', action: 'atualizou configurações', context: 'Sistema', time: '1 hora atrás', avatar: 'MS', color: 'bg-amber-100 text-amber-600' },
+];
+
+const UPCOMING_EVENTS = [
+  { id: 1, title: 'Reunião de Pais', date: '14/03/2024', time: '19:00', type: 'MEETING' },
+  { id: 2, title: 'Prova de Matemática - 6º A', date: '17/03/2024', time: '08:00', type: 'EXAM' },
+  { id: 3, title: 'Feira de Ciências', date: '21/03/2024', time: '14:00', type: 'EVENT' },
+  { id: 4, title: 'Conselho de Classe', date: '24/03/2024', time: '15:00', type: 'MEETING' },
+];
+
+const AdminStatCard = ({ title, value, icon: Icon, color }: any) => (
+  <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
+     <div>
+        <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
+        <h3 className="text-3xl font-bold text-slate-900 tracking-tight">{value}</h3>
+     </div>
+     <div className={`p-3 rounded-xl ${color}`}>
+        <Icon size={24} />
+     </div>
+  </div>
+);
 
 const Dashboard: React.FC<DashboardProps> = ({ user }) => {
   const StatCard = ({ title, value, icon: Icon, colorClass, trend, label }: any) => (
@@ -46,8 +73,82 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
     </div>
   );
 
+  // --- ADMIN DASHBOARD LAYOUT ---
+  if (user.role === UserRole.ADMIN) {
+    return (
+      <div className="space-y-8 animate-in fade-in duration-500">
+         {/* Header */}
+         <div>
+            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Bem-vindo, {user.name}!</h1>
+            <p className="text-slate-500 mt-2 text-lg">Gerencie sua escola e acompanhe todas as atividades</p>
+         </div>
+         
+         {/* Stats Cards - Specific Admin Layout */}
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <AdminStatCard title="Total de Alunos" value="1.247" icon={Users} color="bg-blue-50 text-blue-600" />
+            <AdminStatCard title="Professores" value="87" icon={UserIcon} color="bg-emerald-50 text-emerald-600" />
+            {/* Keeping requested cards */}
+            <AdminStatCard title="Taxa de Aprovação" value="94%" icon={TrendingUp} color="bg-purple-50 text-purple-600" /> 
+            <AdminStatCard title="Ocorrências" value="12" icon={AlertCircle} color="bg-amber-50 text-amber-600" />
+         </div>
+         
+         {/* Content Grid */}
+         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Recent Activities */}
+            <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+               <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-lg font-bold text-slate-800">Atividades Recentes</h3>
+                  <button className="text-sm font-bold text-emerald-600 hover:text-emerald-700 transition-colors">Ver todas</button>
+               </div>
+               <div className="space-y-6">
+                  {RECENT_ACTIVITIES.map(activity => (
+                     <div key={activity.id} className="flex gap-4 items-start">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${activity.color}`}>
+                           {activity.avatar}
+                        </div>
+                        <div>
+                           <p className="text-sm text-slate-800 leading-snug">
+                              <span className="font-bold">{activity.user}</span> {activity.action}
+                           </p>
+                           <p className="text-xs text-slate-400 mt-1 font-medium">
+                              {activity.context} • {activity.time}
+                           </p>
+                        </div>
+                     </div>
+                  ))}
+               </div>
+            </div>
+            
+            {/* Upcoming Events */}
+            <div className="lg:col-span-1 space-y-6">
+               <div>
+                  <div className="flex justify-between items-center mb-4">
+                     <h3 className="text-lg font-bold text-slate-800">Próximos Eventos</h3>
+                     <button className="p-1 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Plus size={20} /></button>
+                  </div>
+                  <div className="space-y-4">
+                     {UPCOMING_EVENTS.map(event => (
+                        <div key={event.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover:border-blue-200 transition-colors cursor-pointer">
+                           <div className={`p-3 rounded-lg shrink-0 ${event.type === 'EXAM' ? 'bg-indigo-50 text-indigo-600' : event.type === 'EVENT' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                              {event.type === 'EXAM' ? <FileText size={20} /> : <Calendar size={20} />}
+                           </div>
+                           <div className="min-w-0">
+                              <h4 className="text-sm font-bold text-slate-800 truncate">{event.title}</h4>
+                              <p className="text-xs text-slate-500 mt-0.5">{event.date} às {event.time}</p>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+    );
+  }
+
+  // --- DEFAULT DASHBOARD (Professor/Student) ---
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Olá, {user.name.split(' ')[0]} 👋</h1>
@@ -70,15 +171,6 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
           </>
         )}
         
-        {user.role === UserRole.ADMIN && (
-          <>
-            <StatCard title="Alunos Matriculados" value="1,240" icon={Users} colorClass={{ bg: 'bg-blue-50', text: 'text-blue-600' }} trend="8" />
-            <StatCard title="Professores" value="48" icon={BookOpen} colorClass={{ bg: 'bg-purple-50', text: 'text-purple-600' }} />
-            <StatCard title="Taxa de Aprovação" value="89%" icon={TrendingUp} colorClass={{ bg: 'bg-emerald-50', text: 'text-emerald-600' }} trend="2" />
-            <StatCard title="Ocorrências" value="12" icon={AlertCircle} colorClass={{ bg: 'bg-rose-50', text: 'text-rose-600' }} />
-          </>
-        )}
-
         {/* STUDENT DASHBOARD WIDGETS */}
         {user.role === UserRole.STUDENT && (
           <>
@@ -114,7 +206,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user }) => {
         )}
       </div>
 
-      {/* Charts Section */}
+      {/* Charts Section (Only for Non-Admin now) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Attendance Chart */}
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
